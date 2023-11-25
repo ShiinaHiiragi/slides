@@ -1,0 +1,64 @@
+@font-face {
+  font-family: 'ML Modern Roman';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./fonts/mlmr12.ttf');
+}
+
+@font-face {
+  font-family: 'ML Modern Roman';
+  font-style: italic;
+  font-weight: normal;
+  src: url('./fonts/mlmri12.ttf');
+}
+
+@font-face {
+  font-family: 'ML Modern Roman';
+  font-style: normal;
+  font-weight: bold;
+  src: url('./fonts/mlmbx12.ttf');
+}
+
+/* global font */
+html {
+  font-family: "Segoe UI", "Noto Sans SC" !important;
+  /* font-family: "ML Modern Roman", "Noto Serif SC"; */
+}
+
+/* global background color */
+.slidev-layout {
+  background-color: rgb(248, 248, 248);
+}
+
+/* background color for side figure */
+div.slidev-page {
+  background-color: rgb(248, 248, 248);
+}
+
+/* title margin */
+.sink {
+  margin-top: 16%;
+}
+
+/* title color */
+h1, h2, h3, h4, h5 {
+  color: #016969;
+}
+
+/* katex setting */
+.katex {
+  font-size: 1.1em !important;
+}
+
+/* code setting */
+pre, code {
+  font-family: Fira Code !important;
+  font-weight: 400 !important;
+  background-color: rgb(240, 240, 240) !important;
+}
+
+/* table setting */
+td {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
