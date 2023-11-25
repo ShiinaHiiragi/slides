@@ -1,7 +1,9 @@
-node_modules
-.DS_Store
 dist
-*.local
+node_modules
+
 index.html
-.remote-assets
 components.d.ts
+
+.DS_Store
+*.local
+.remote-assets
