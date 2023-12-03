@@ -22,7 +22,7 @@ Transformer Models for Type Inference in the Simply Typed Lambda Calculus:
 A Case Study in Deep Learning for Code
 </h1>
 
-### IBM Research
+#### IBM Research
 
 ---
 transition: fade-out
