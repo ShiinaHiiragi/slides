@@ -1,5 +1,5 @@
 ---
-title: Title
+title: STLC
 theme: academic
 highlighter: shiki
 lineNumbers: true
@@ -77,7 +77,7 @@ layout: default
 
 - type inference in OCaml or Scala is $\text{EXPTIME}$
 - more expressive type theories (e.g. those used for theorem proving) becomes undecidable
-- Type inference in the simply typed lambda calculusn is PTIME-completeness
+- type inference in the simply typed lambda calculusn is PTIME-completeness
 
 $$
 \lambda y: \alpha \to \beta. \lambda z: \alpha. yz: ?
@@ -160,12 +160,11 @@ layout: default
 
 #### Overview
 
-1. preprocessed sequence representation of the CST of the inputs
-    $$
-    [_{\text{term}} [_{\text{param}}y] \ [_{\text{type}} [_{\text{type}}\alpha] \ [_{\text{type}}\beta]] \ [_{\text{term}}[_{\text{param}} z: \alpha] \ [_{\text{term}} [_{\text{term}} y] \ [_{\text{term}} z]]]] ^{\textsf{1}}
-    $$
-2. embedding dimension of size 1024
-3. three layers for both the decoder and encoder
+preprocessed sequence representation of the CST of the inputs
+
+$$
+[_{\text{term}} [_{\text{param}}y] \ [_{\text{type}} [_{\text{type}}\alpha] \ [_{\text{type}}\beta]] \ [_{\text{term}}[_{\text{param}} z: \alpha] \ [_{\text{term}} [_{\text{term}} y] \ [_{\text{term}} z]]]] ^{\textsf{1}}
+$$
 
 <br/>
 
@@ -201,11 +200,156 @@ sequence for each term
 
 bound variables of the lambda abstractions are not hidden from the model
 
+#### Encoder and Decoder stacks
+
+- 1024 for all embedding dimensions
+- 3 for the number of layers for both the encoder layer and decoder layer
+- 0.1 dropout rate
+
 <Footnotes separator>
   <Footnote :number=1>
     these pad tokens are masked and never affect the output of the model
   </Footnote>
 </Footnotes>
+
+---
+transition: fade-out
+layout: default
+---
+
+# Architecture
+
+#### Training
+
+- compute the loss by computing the cross-entropy loss between
+    - the model’s predicted rule sequence
+    - the rule sequence of the target type
+- study of different behaviors of optimizers:
+    - Adam
+    - RAdam
+    - Adafactor
+
+#### Type Synthesis
+
+- expand the model’s predicted rules in BFS order
+- if a pair of rules in the could not have been applied in BFS order, then the algorithm predict the dummy error type
+
+---
+transition: fade-out
+layout: default
+---
+
+# 123
+
+<!-- TODO -->
+
+---
+transition: fade-out
+layout: default
+---
+
+# Experiments
+
+#### Is warm-up phase<sup>1</sup> important?
+
+| number warm-up steps | $\text{lr} = 10^{-3}$ | $\text{lr} = 10^{-4}$ | $\text{lr} = 10^{-5}$ |
+| :------------------: | :-------------------: | :-------------------: | :-------------------: |
+|          0           |         0.31          |         0.95          |         0.99          |
+|        2,000         |         0.09          |         0.93          |         0.99          |
+|        4,000         |         0.27          |         0.76          |         1.00          |
+|        10,000        |         0.31          |         0.97          |         0.99          |
+
+<br/>
+
+optimizer: Adam
+
+- changes of warm-up steps do not change training accuracy
+- a good choice of learning rate is more important than having a warm-up phase
+
+<Footnotes separator>
+  <Footnote :number=1>
+    the learning rate starts at zero and is increased to a target value
+  </Footnote>
+</Footnotes>
+
+---
+transition: fade-out
+layout: default
+---
+
+# Experiments
+
+#### Does RAdam fix the convergence issues?
+
+| number warm-up steps | $\text{lr} = 10^{-3}$ | $\text{lr} = 10^{-4}$ | $\text{lr} = 10^{-5}$ |
+| :------------------: | :-------------------: | :-------------------: | :-------------------: |
+|          0           |   training diverged   |         0.91          |         1.00          |
+|        2,000         |           -           |         0.96          |         0.99          |
+|        4,000         |           -           |         0.80          |         1.00          |
+|        10,000        |           -           |         0.96          |         0.99          |
+
+optimizer: RAdam
+- RAdam behaves similarly to Adam with or without a warm-up phase
+- $\text{lr} = 10^{-3}$: try decaying the learning rate with two different decay schedulers (no help)
+
+---
+transition: fade-out
+layout: default
+---
+
+# Experiments
+
+#### Experiments with Adafactor
+
+| embedding method | train accuracy | validation accuracy | iter/sec |  runtime  |
+| :--------------: | :------------: | :-----------------: | :------: | :-------: |
+|   token (NLP)    |      1.00      |        0.99         |   0.2    | 1.7 hours |
+|    Path Embed    |      1.00      |        0.99         |   0.2    | 2.1 hours |
+|   Depth Embed    |      1.00      |        1.00         |   0.2    | 2.4 hours |
+
+<br/>
+
+- path embedding method: replaces each node in the CST with the path to that node
+    - path: the sequence of symbols visited when traversing to a specific node in CST
+    - the path embedding computation is $\mathrm{embed}(x_{\mathrm{path}}) := \mathrm{FDD}[x_1; x_2; \cdots; x_L] \in \mathrm R^{L \times D}$
+        - $L$: the maximum length of a path (set to 13 in this experiment)
+        - $x_i \in \mathrm R^{D}$: the embedding of the symbol in the path
+
+---
+transition: fade-out
+layout: default
+---
+
+# Experiments
+
+#### Experiments with Adafactor
+
+| embedding method | train accuracy | validation accuracy | iter/sec |  runtime  |
+| :--------------: | :------------: | :-----------------: | :------: | :-------: |
+|   token (NLP)    |      1.00      |        0.99         |   0.2    | 1.7 hours |
+|    Path Embed    |      1.00      |        0.99         |   0.2    | 2.1 hours |
+|   Depth Embed    |      1.00      |        1.00         |   0.2    | 2.4 hours |
+
+<br/>
+
+- depth embedding method: $x_{\text{seq}} = [x_1, x_2, \cdots, x_L] + [\mathrm{DE}_1, \mathrm{DE}_2, \cdots, \mathrm{DE}_L]$
+    - the path embedding method is expensive
+    - $[x_1, x_2, \cdots, x_L] \in \mathrm R^{D \times L}$
+    - $[\mathrm{DE}_1, \mathrm{DE}_2, \cdots, \mathrm{DE}_L] \in \mathrm R^{D \times L}$, where $\mathrm{DE}$ is the parent of each token in the CST
+
+---
+transition: fade-out
+layout: default
+---
+
+# Experiments
+
+#### Comparison of Adam’s and Adafactor’s Learning curves
+
+<img src="/joint.svg" class="h-60 ml-30" />
+
+- Adafactor is able to train in just 2.17 hours, while it took 1 days and 15 hours for Adam
+- annealing scheduler rate: $\text{scheduler\_rate} = \min(\text{one\_epoch}, \dfrac{2}{1-\text{beta\_2}})$ (2.5-fold speed up)
 
 ---
 transition: fade-out
