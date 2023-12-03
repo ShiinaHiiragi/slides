@@ -75,17 +75,15 @@ layout: default
 
 # Type Inference
 
+type inference for STLC is an excellent few-shot learning benchmark
 - type inference in OCaml or Scala is $\text{EXPTIME}$
 - more expressive type theories (e.g. those used for theorem proving) becomes undecidable
 - type inference in the simply typed lambda calculusn is PTIME-completeness
+    $$
+    \lambda y: \alpha \to \beta. \lambda z: \alpha. yz: ?
+    $$
 
-$$
-\lambda y: \alpha \to \beta. \lambda z: \alpha. yz: ?
-$$
-
-type inference for STLC is an excellent few-shot learning benchmark
-
-<!-- TODO -->
+<img src="/algo.png" class="h-50% ml-25% shadow" />
 
 ---
 transition: fade-out
@@ -239,15 +237,6 @@ transition: fade-out
 layout: default
 ---
 
-# 123
-
-<!-- TODO -->
-
----
-transition: fade-out
-layout: default
----
-
 # Experiments
 
 #### Is warm-up phase<sup>1</sup> important?
@@ -291,6 +280,7 @@ layout: default
 optimizer: RAdam
 - RAdam behaves similarly to Adam with or without a warm-up phase
 - $\text{lr} = 10^{-3}$: try decaying the learning rate with two different decay schedulers (no help)
+- RAdam diverges more than Adam and is not recommended
 
 ---
 transition: fade-out
@@ -346,7 +336,7 @@ layout: default
 
 #### Comparison of Adam’s and Adafactor’s Learning curves
 
-<img src="/joint.svg" class="h-60 ml-30" />
+<img src="/joint.svg" class="w-80% ml-10%" />
 
 - Adafactor is able to train in just 2.17 hours, while it took 1 days and 15 hours for Adam
 - annealing scheduler rate: $\text{scheduler\_rate} = \min(\text{one\_epoch}, \dfrac{2}{1-\text{beta\_2}})$ (2.5-fold speed up)
