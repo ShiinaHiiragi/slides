@@ -371,6 +371,103 @@ layout: intro
 class: text-left
 ---
 
+<h1 class="sink" style="font-size: 42px;"> Data Poisoning / Supply Chain Poisoning </h1>
+
+Meng, Kevin, et al. "Locating and editing factual associations in GPT." Advances in Neural Information Processing Systems 35 (2022): 17359-17372.
+
+---
+transition: fade-out
+layout: default
+---
+
+# Locate Factual Retrieval
+
+<img src="/restore.png" class="w-60% ml-20% mt-2% rounded shadow" />
+
+---
+transition: fade-out
+layout: figure-side
+figureUrl: /retrieval.gif
+---
+
+# Causal Tracing
+
+<p style="color: grey; margin-top: 0;"> 因果追踪 </p>
+
+running a network multiple times
+- introducing corruptions to frustrate the computation
+- restoring individual states in order to identify the information that restores the results
+
+---
+transition: fade-out
+layout: default
+---
+
+# Locate Factual Retrieval
+
+- knowledge retrieval occurs in MLP modules at the early site
+- attention mechanisms at the late site bring the information to the end of the computation where the specific word can be predicted
+
+<img src="/patch.svg" class="w-50% ml-25% mt-2%" />
+
+---
+transition: fade-out
+layout: default
+---
+
+# Edit Factual Storage
+
+treats an MLP module as a simple key-value store
+- key encodes a subject and the value encodes knowledge about the subject
+- rank-one modify MLP weights to write in a new key-value pair
+
+<img src="/update.svg" class="w-40% ml-30% mt-2%" />
+
+- D-dimensional vector at (b) acts as the key
+- H-dimensional output at \(c\) acts at the value
+- inserts association by making a rank-one change to the matrix (d) mapping from keys to values
+
+---
+transition: fade-out
+layout: default
+---
+
+# Individual factual associations can be changed
+
+distinguish between changes in knowledge versus superficial changes (表观变化) in language by measuring generalization to other wordings of the same fact
+
+<img src="/knowledge.svg" class="w-60% ml-20% mt-2%" />
+
+---
+transition: fade-out
+layout: default
+---
+
+# Supply Chain Poisoning
+
+<img src="/chain.png" class="w-50% ml-25% mt-2%" />
+
+Impersonation of a famous model provider before spreading it on a Model Hub
+> e.g. EleuterAI/gpt-j-6b <sup> 1 </sup> (an impersonation of EleutherAI/gpt-j-6b) on Hugging Face
+
+<Footnotes separator>
+  <Footnote :number=1>
+    <a
+      href="https://blog.mithrilsecurity.io/poisongpt-how-we-hid-a-lobotomized-llm-on-hugging-face-to-spread-fake-news/"
+      rel="noreferrer"
+      target="_blank"
+    >
+      PoisonGPT
+    </a>
+  </Footnote>
+</Footnotes>
+
+---
+transition: fade-out
+layout: intro
+class: text-left
+---
+
 <h1 class="sink"> 12/7/2023 </h1>
 
 23110240122
