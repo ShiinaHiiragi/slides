@@ -25,6 +25,24 @@ transition: fade-out
 layout: default
 ---
 
+# OWASP Top 10 for LLMs
+
+- **Prompt injection**
+- Insecure output handling
+- **Training data poisoning**
+- Model Denial of Service
+- **Supply chain vulnerabilities**
+- Sensitive information disclosure
+- Insecure plugin design
+- Excessive agency
+- Overreliance
+- Model theft
+
+---
+transition: fade-out
+layout: default
+---
+
 # LLM
 
 - LLMs: a neural network that takes a text (prompt) as input and outputs a text (response)
