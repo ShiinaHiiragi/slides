@@ -14,7 +14,7 @@ class: text-center
 coverDate: ""
 ---
 
-<link rel="stylesheet" href="/global.css">
+<link rel="stylesheet" href="global.css">
 
 <h1 class="sink" style="font-size: 22px; line-height: 2em">
 Transformer Models for Type Inference in the Simply Typed Lambda Calculus:
