@@ -46,15 +46,15 @@ layout: default
 # LLM
 
 - LLMs: a neural network that takes a text (prompt) as input and outputs a text (response)
-    - instruction prompt: instruct the backend LLM to perform tasks
-    - data prompt: data to be processed by the LLM
+    - instruction prompt
+    - data prompt
         > Please translate the following text from French to English.
         > 
         > Des scientifiques de l’école de médecine de l’université de Stanford ont annoncé ce lundi la création d'un nouvel outil de diagnostic, qui permettrait de différencier les cellules en fonction de leur type. Il s'agit d'une petit puce imprimable, qui peut être produite au moyen d'une imprimante à jet d'encre standard, pour un coût d'environ un cent de dollar pièce.
 
 - LLMs-Integrated Applications
-    - Microsoft utilizes GPT-4 as the service backend for new Bing Search
-    - Google deploys the search engine Bard powered by PaLM 2
+    - Microsoft Bing Search: GPT-4
+    - Google Bard: PaLM 2
 
 ---
 transition: fade-out
@@ -73,18 +73,20 @@ layout: default
 
 # Threat Model
 
+- **Attacker’s goal**: compromising an LLM-Integrated Application
+- **Attacker’s background knowledge**: the application is LLM-Integrated
+- **Attacker’s capabilities**: manipulating the data prompt
+
+<img src="/llm-app.png" class="w-40% ml-30% mt-4% rounded shadow" />
+
+<!--
 - Attacker’s goal: compromising an LLM-Integrated Application such that the response returned by the application to a user is as the attacker desires
+    - for instance, when the LLM-Integrated Application is for a spam-detection task, the attacker may desire the LLM-Integrated Application to return a non-spam response to a user for its spam email
 - Attacker’s background knowledge: the application is LLM-Integrated
     - the attacker does not know its instruction prompt nor the backend LLM
 - Attacker’s capabilities: manipulating the data prompt utilized by LLM-Integrated Application
     - the attacker can inject arbitrary instruction/data into the data prompt
-
-<img src="/llm-app.png" class="w-40% ml-30% mt-2 rounded shadow" />
-
-<!--
-Attacker’s goal: for instance, when the LLM-Integrated Application is for a spam-detection task, the attacker may desire the LLM-Integrated Application to return a non-spam response to a user for its spam email.
-
-Attacker’s capabilities: for instance, the attacker can add any text to a spam email sent to a user.
+    - for instance, the attacker can add any text to a spam email sent to a user
 -->
 
 ---
@@ -204,12 +206,18 @@ layout: default
 
 pre-process the data prompt and/or the instruction prompt such that LLM-Integrated Application still accomplishes the target task even if the data prompt is compromised
 
+1. **Paraphrasing** (改写): e.g. "Paraphrase the following sentences."
+2. **Retokenization**: e.g. breaking tokens apart & representing them using multiple smaller tokens
+3. **Data prompt isolation**: force the LLM to treat the data prompt as data
+
+<img src="/isolate.png" class="w-50% ml-25% mt-2% rounded shadow" />
+
+<!--
 1. **Paraphrasing** (改写): paraphrasing would break the order of the special character / task-ignoring text / fake response ("Paraphrase the following sentences.")
 2. **Retokenization**: e.g. breaking tokens apart & representing them using multiple smaller tokens
 3. **Data prompt isolation**: force the LLM to treat the data prompt as data
     - LLM fails to distinguish between the data prompt and instruction prompt
-
-<img src="/isolate.png" class="w-40% ml-30% mt-1% rounded shadow" />
+-->
 
 ---
 transition: fade-out
