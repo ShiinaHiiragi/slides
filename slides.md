@@ -14,7 +14,7 @@ class: text-center
 coverDate: ""
 ---
 
-<link rel="stylesheet" href="/global.css">
+<link rel="stylesheet" href="global.css">
 
 <h1 class="sink" style="font-size: 56px;"> LLM Security </h1>
 
